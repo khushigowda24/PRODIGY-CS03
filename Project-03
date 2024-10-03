@@ -1,0 +1,60 @@
+import re
+
+def assess_password_strength(password):
+    has_numbers = any(char.isdigit() for char in password)
+    has_uppercase = any(char.isupper() for char in password)
+    has_lowercase = any(char.islower() for char in password)
+    meets_length_requirement = len(password) >= 8
+    has_special_chars = bool(re.search(r"[!@#$%^&*(),.?\":{}|<>]", password))
+
+    criteria_met = sum([has_numbers, has_uppercase, has_lowercase, meets_length_requirement, has_special_chars])
+    if criteria_met == 5:
+        return "Password Strength: Very Strong (All criteria are met)."
+    elif criteria_met == 4:
+        return "Password Strength: Strong (4 out of 5 criteria met)."
+    elif criteria_met == 3:
+        return "Password Strength: Moderate (3 out of 5 criteria met)."
+    else:
+        return "Password Strength: Weak (Less than 3 criteria met)."
+
+def display_tips():
+    print("---------- Password Security Tips ----------")
+    tips = [
+        "1. Use at least 12 characters for better security.",
+        "2. Combine uppercase, lowercase, numbers, and symbols.",
+        "3. Avoid using common words or sequences.",
+        "4. Don’t include personal information (e.g., names, birthdays).",
+        "5. Consider using passphrases (e.g., a sentence or phrase).",
+        "6. Use different passwords for each account.",
+        "7. Update passwords periodically.",
+        "8. Enable Two-Factor Authentication (2FA) when possible.",
+        "9. Beware of phishing—only enter passwords on trusted sites.",
+        "10. Use a password manager to generate and store strong passwords."
+    ]
+    for tip in tips:
+        print(tip)
+
+def main():
+    display_tips()
+    try:
+        num_passwords = int(input("\nHow many passwords would you like to check? "))
+    except ValueError:
+        print("Invalid input! Please enter a valid number.")
+        return
+
+    for i in range(num_passwords):
+        print(f"\nEnter password {i + 1}:")
+        password = input("> ")
+
+        if len(password) > 2:
+            masked_password = password[0] + "#" * (len(password) - 2) + password[-1]
+        else:
+            masked_password = password
+        strength = assess_password_strength(password)
+
+        
+        print(f"\nPassword {i + 1} (masked): {masked_password}")
+        print(strength)
+
+if __name__ == "__main__":
+    main()
